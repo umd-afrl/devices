@@ -1,0 +1,6 @@
+[package]
+name = "beagle_avmu"
+version = "0.1.0"
+authors = ["jnowaczek <jnowaczek@users.noreply.github.com>"]
+
+[dependencies]
