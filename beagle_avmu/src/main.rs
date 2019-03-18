@@ -2,8 +2,6 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-
 extern crate ws;
 extern crate crossbeam;
 #[macro_use]
@@ -15,6 +13,7 @@ use std::thread;
 use std::thread::sleep;
 use crossbeam::channel::{Sender, Receiver, unbounded};
 use std::time::Duration;
+use std::ffi::CString;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct AvmuData {
@@ -22,6 +21,7 @@ struct AvmuData {
     peaks: Vec<i32>,
 }
 
+mod libavmu;
 
 fn main() {
     let (avmu_sender, avmu_receiver): (Sender<AvmuData>, Receiver<AvmuData>) = unbounded();
@@ -73,5 +73,18 @@ fn main() {
     let _ = server.join();
     let _ = client.join();
 
-    println!("All done.")
+    println!("All done.");
+
+    unsafe {
+        let ip: std::ffi::CString = CString::new("192.168.1.219").expect("Failed creating CString");
+
+        let task = libavmu::createTask();
+        print!("{:?}", *task);
+        if libavmu::setIPAddress(task, ip.as_ptr()) != libavmu::ERR_OK {
+            panic!();
+        };
+        if libavmu::initialize(task, *std::ptr::null(), *std::ptr::null()) != libavmu::ERR_OK {
+            panic!();
+        };
+    }
 }

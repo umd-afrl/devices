@@ -6,6 +6,7 @@ build = "build.rs"
 
 [build-dependencies]
 bindgen = "0.48.1"
+fs_extra = "1.1.0"
 
 [dependencies]
 ws = "*"
@@ -13,3 +14,6 @@ crossbeam = "*"
 serde = { version = "1.0.89", features = ["derive"] }
 serde_json = "1.0.39"
 libc = "0.2.50"
+
+[profile.dev]
+rpath = true
