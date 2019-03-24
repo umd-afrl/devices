@@ -5,6 +5,8 @@ from multiprocessing import Queue
 
 import websockets
 
+
+
 logging.basicConfig()
 
 queue = Queue()
@@ -12,8 +14,16 @@ queue = Queue()
 clients = set()
 
 
+def initialize(in_queue, ip, port):
+    global queue
+    queue = in_queue
+    asyncio.get_event_loop().run_until_complete(websockets.serve(avmu, ip, port))
+    asyncio.get_event_loop().run_forever()
+
+
 def data_event():
-    return json.dump(queue.get())
+    global queue
+    return json.dumps(queue.get(block=True))
 
 
 async def notify_data():
@@ -37,7 +47,3 @@ async def avmu(websocket, path):
         await websocket.send(data_event())
     finally:
         await unregister(websocket)
-
-
-asyncio.get_event_loop().run_until_complete(websockets.serve(avmu, 'localhost', 8080))
-asyncio.get_event_loop().run_forever()
