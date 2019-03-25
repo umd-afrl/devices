@@ -5,8 +5,6 @@ from multiprocessing import Queue
 
 import websockets
 
-
-
 logging.basicConfig()
 
 queue = Queue()
@@ -44,6 +42,7 @@ async def avmu(websocket, path):
     # register(websocket) sends user_event() to websocket
     await register(websocket)
     try:
-        await websocket.send(data_event())
+        while True:
+            await websocket.send(data_event())
     finally:
         await unregister(websocket)
