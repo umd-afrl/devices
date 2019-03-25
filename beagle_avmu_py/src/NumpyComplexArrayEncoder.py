@@ -2,7 +2,7 @@ import json
 import numpy as np
 
 
-class NumpyComplexArrayEncoder(json.jsonencoder):
+class NumpyComplexArrayEncoder(json.JSONEncoder):
     def default(self, z):
         if isinstance(z, (np.ndarray, np.number)):
             return z.tolist()
