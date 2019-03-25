@@ -9,7 +9,7 @@ def avmu(out_queue: Queue, frequencies: Pipe, scan: bool):
     with AvmuCapture.initialize() as device:
         frequencies.send(AvmuCapture.get_frequencies(device))
         while scan:
-            out_queue.put_nowait(device.capture())
+            out_queue.put_nowait(AvmuCapture.capture(device))
 
 
 def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
