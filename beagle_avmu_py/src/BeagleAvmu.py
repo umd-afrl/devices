@@ -14,13 +14,14 @@ def avmu(out_queue: Queue, frequencies: Pipe, scan: bool):
 
 def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
     freq = frequencies.recv()
-    axis = OneDimDSP.get_axis(freq, 8.134, 1024)
-    data = None
+    axis, front_padding_count = OneDimDSP.get_axis_and_padding(freq, 8.134, 1024)
+    range_data = None
     while process:
-        previous_data = data
+        previous_data = range_data
         data = in_queue.get(True)
         data = OneDimDSP.apply_window(data)
-        change = OneDimDSP.coherent_change_detection(data, previous_data)
+        range_data = OneDimDSP.pad_data(data, front_padding_count)
+        change = OneDimDSP.coherent_change_detection(range_data, previous_data)
         peaks = OneDimDSP.detect_peaks(data, 100, 300, 1e-4, axis)
         out_queue.put_nowait((change, peaks))
 

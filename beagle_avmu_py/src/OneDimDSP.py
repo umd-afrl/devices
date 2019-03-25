@@ -6,14 +6,36 @@ def apply_window(sweep_data):
     return np.multiply(sweep_data, scipy.signal.windows.chebwin(len(sweep_data), 45))
 
 
-def get_axis(frequencies, cable_delays, num_points):
+def pad_data(sweep_data, front_padding_count):
+    padded_data = []
+    while len(padded_data) < front_padding_count:
+        padded_data.append(0)
+    padded_data.extend(sweep_data)
+
+    powers_of_two = [2 ** x for x in range(8, 16)]
+
+    final_size = powers_of_two[0]
+    for size in powers_of_two:
+        if size > len(padded_data):
+            final_size = size
+            break
+
+    while len(padded_data) < final_size:
+        padded_data.append(0)
+
+    return np.array(padded_data)
+
+
+def get_axis_and_padding(frequencies, cable_delays, num_points):
     step = abs(frequencies[0] - frequencies[-1]) / len(frequencies)
+    front_padding_count = max(int(frequencies[0] / step), 0)
     freq_step = step * 1e6  # Step in MHz to Hz
     num_cells = 2 * num_points
     x_axis = np.transpose(np.array(range(0, num_cells))) * (1 / (num_cells * freq_step * 2))  # Hz to seconds
     x_axis = x_axis * 1e9  # Seconds to nanoseconds
     x_axis = x_axis - cable_delays
-    return x_axis * 0.983571  # Nanoseconds to feet
+    x_axis = x_axis * 0.983571  # Nanoseconds to feet
+    return x_axis, front_padding_count
 
 
 def coherent_change_detection(data, previous):
