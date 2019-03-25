@@ -28,19 +28,19 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
 def ws(in_queue: Queue, ip='localhost', port=8008):
     WSServer.initialize(in_queue, ip, port)
     while True:
-        await WSServer.notify_data()
+        WSServer.notify_data()
 
 
 if __name__ == '__main__':
-    frequencies_pipe = Pipe()
+    (frequencies_in, frequencies_out) = Pipe(False)
     raw_queue = Queue()
     processed_queue = Queue()
 
-    avmu_process = Process(target=avmu, args={raw_queue, frequencies_pipe, True})
+    avmu_process = Process(target=avmu, args=(raw_queue, frequencies_out, True))
     avmu_process.start()
 
-    dsp_process = Process(target=dsp, args={raw_queue, processed_queue, frequencies_pipe, True})
+    dsp_process = Process(target=dsp, args=(raw_queue, processed_queue, frequencies_in, True))
     dsp_process.start()
 
-    ws_process = Process(target=ws, args={processed_queue})
+    ws_process = Process(target=ws, args=(processed_queue,))
     ws_process.start()

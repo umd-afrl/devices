@@ -14,7 +14,7 @@ queue = Queue()
 clients = set()
 
 
-def initialize(in_queue, ip, port):
+def initialize(in_queue: Queue, ip: str, port: int):
     global queue
     queue = in_queue
     asyncio.get_event_loop().run_until_complete(websockets.serve(avmu, ip, port))
