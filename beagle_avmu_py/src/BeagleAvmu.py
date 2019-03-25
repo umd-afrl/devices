@@ -23,7 +23,7 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
         range_data = OneDimDSP.pad_data(data, front_padding_count)
         change = OneDimDSP.coherent_change_detection(range_data, previous_data)
         peaks = OneDimDSP.detect_peaks(data, 100, 300, 1e-4, axis)
-        out_queue.put_nowait((change.tolist(), peaks))
+        out_queue.put_nowait((change, peaks))
 
 
 def ws(in_queue: Queue, ip='192.168.1.7', port=8008):

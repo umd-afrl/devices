@@ -5,6 +5,8 @@ from multiprocessing import Queue
 
 import websockets
 
+import NumpyComplexArrayEncoder
+
 logging.basicConfig()
 
 queue = Queue()
@@ -21,7 +23,7 @@ def initialize(in_queue: Queue, ip: str, port: int):
 
 def data_event():
     global queue
-    return json.dumps(queue.get(block=True))
+    return json.dumps(queue.get(block=True), cls=NumpyComplexArrayEncoder)
 
 
 async def notify_data():
