@@ -17,8 +17,11 @@ def get_axis(frequencies, cable_delays, num_points):
 
 
 def coherent_change_detection(data, previous):
-    diff_ccd = np.abs(data - previous)
-    return np.reshape(diff_ccd, (1, 2048))
+    if previous is not None:
+        diff_ccd = np.abs(data - previous)
+        return np.reshape(diff_ccd, (1, 2048))
+    else:
+        return np.reshape(data, (1, 2048))
 
 
 def detect_peaks(x, num_train, num_guard, rate_fa, axis):
