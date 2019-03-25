@@ -5,7 +5,7 @@ from multiprocessing import Queue
 
 import websockets
 
-import from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
+from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
 
 logging.basicConfig()
 
