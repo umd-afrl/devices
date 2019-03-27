@@ -13,7 +13,7 @@ def initialize(num_points=1024, start_f=250, stop_f=2100, hop_rate='HOP_15K'):
         device.setIPAddress(avmu_ip)
         device.setIPPort(1027)
         device.setTimeout(500)
-        device.setMeasurementType('PROG_SYNC')
+        device.setMeasurementType('PROG_ASYNC')
 
         device.initialize()
 
@@ -22,18 +22,23 @@ def initialize(num_points=1024, start_f=250, stop_f=2100, hop_rate='HOP_15K'):
 
         device.utilGenerateLinearSweep(startF_mhz=start_f, stopF_mhz=stop_f, points=num_points)
 
-        device.start()
+        begin_capture(device)
 
         yield device
 
     finally:
-        device.stop()
+        end_capture(device)
 
 
 def get_frequencies(device):
     return device.getFrequencies()
 
 
-def capture(device) -> numpy.ndarray:
-    device.measure()
-    return device.extractAllPaths()[0][1]['data']
+def begin_capture(device):
+    device.start()
+    device.beginAsync()
+
+
+def end_capture(device):
+    device.haltAsync()
+    device.stop()
