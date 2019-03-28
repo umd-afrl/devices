@@ -7,7 +7,7 @@ from aiohttp import web
 
 from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
 
-WEB_ROOT = '/home/debian/ui/controlpanel/'
+WEB_ROOT = '/home/debian/controlpanel/'
 SERVER = web.Application()
 QUEUE = Queue()
 
@@ -45,7 +45,7 @@ async def on_shutdown(app):
         await socket.close()
 
 
-async def start(queue: Queue, ip='192,168,1,7', port=80):
+async def start(queue: Queue, ip='192.168.1.7', port=8080):
     global runner, site, QUEUE
     QUEUE = queue
     runner = web.AppRunner(SERVER)
