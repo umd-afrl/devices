@@ -1,3 +1,4 @@
+import asyncio
 from multiprocessing import Process, Queue, Pipe
 
 import AvmuCapture
@@ -28,7 +29,7 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
 
 
 def ws(in_queue: Queue):
-    await WSServer.start(in_queue)
+    asyncio.ensure_future(WSServer.start(in_queue))
 
 
 if __name__ == '__main__':
