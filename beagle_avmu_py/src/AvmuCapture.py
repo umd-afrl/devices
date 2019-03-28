@@ -1,7 +1,6 @@
 from contextlib import contextmanager
 
 import avmu
-import numpy
 
 
 @contextmanager
