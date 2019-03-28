@@ -28,7 +28,7 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
 
 
 def ws(in_queue: Queue):
-    await WSServer.start(in_queue)
+    WSServer.start(in_queue)
 
 
 if __name__ == '__main__':
