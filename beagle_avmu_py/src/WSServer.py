@@ -1,51 +1,59 @@
 import asyncio
-import json
-import logging
+import os
 from multiprocessing import Queue
 
-import websockets
+import aiohttp_cors
+from aiohttp import web
 
 from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
 
-logging.basicConfig()
+WEB_ROOT = '/home/debian/ui/controlpanel/'
+SERVER = web.Application()
+QUEUE = Queue()
 
-queue = Queue()
+cors = aiohttp_cors.setup(SERVER)
 
-clients = set()
-
-
-def initialize(in_queue: Queue, ip: str, port: int):
-    global queue
-    queue = in_queue
-    asyncio.get_event_loop().run_until_complete(websockets.serve(avmu, ip, port))
-    asyncio.get_event_loop().run_forever()
+resource = cors.add(SERVER.router.add_resource("/hello"))
 
 
-def data_event():
-    global queue
-    data = queue.get(block=True)
-    return json.dumps(data, cls=NumpyComplexArrayEncoder)
+async def root_handler(request):
+    return web.FileResponse(os.path.join(WEB_ROOT, 'index.html'))
 
 
-async def notify_data():
-    if clients:  # asyncio.wait doesn't accept an empty list
-        message = data_event()
-        await asyncio.wait([user.send(message) for user in clients])
+async def websocket_handler(request):
+    ws = web.WebSocketResponse()
+    await ws.prepare(request)
+    await asyncio.create_task(writer(ws))
+    async for msg in ws:
+        pass
+    return ws
 
 
-async def register(websocket):
-    clients.add(websocket)
-
-
-async def unregister(websocket):
-    clients.remove(websocket)
-
-
-async def avmu(websocket, path):
-    # register(websocket) sends user_event() to websocket
-    await register(websocket)
+async def writer(ws):
     try:
+        print('opened')
         while True:
-            await websocket.send(data_event())
-    finally:
-        await unregister(websocket)
+            await ws.send_json(QUEUE.get_nowait(), dumps=NumpyComplexArrayEncoder)
+            await asyncio.sleep(0.01)
+    except Exception as error:
+        print('closed:', type(error))
+
+
+async def on_shutdown(app):
+    # close peer connections
+    for socket in set(app['websockets']):
+        await socket.close()
+
+
+async def start(queue: Queue, ip='192,168,1,7', port=80):
+    global runner, site, QUEUE
+    QUEUE = queue
+    runner = web.AppRunner(SERVER)
+    await runner.setup()
+    site = web.TCPSite(runner, ip, port)
+    await site.start()
+    print('Site available at http://' + site.__getattribute__('_host') + ':' + str(site.__getattribute__('_port')))
+
+
+async def end():
+    await SERVER.shutdown()

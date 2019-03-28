@@ -27,10 +27,8 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
         out_queue.put_nowait((change, peaks))
 
 
-def ws(in_queue: Queue, ip='192.168.1.7', port=8008):
-    WSServer.initialize(in_queue, ip, port)
-    while True:
-        WSServer.notify_data()
+def ws(in_queue: Queue):
+    await WSServer.start(in_queue)
 
 
 if __name__ == '__main__':
