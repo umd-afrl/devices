@@ -23,7 +23,7 @@ async def root_handler(request):
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
-    await asyncio.create_task(writer(ws))
+    await writer(ws)
     async for msg in ws:
         pass
     return ws
@@ -38,6 +38,7 @@ async def writer(ws):
                 await ws.send_json(data, dumps=NumpyComplexArrayEncoder)
                 await asyncio.sleep(0.01)
             except queue.Empty:
+                logging.debug('Data queue empty.')
                 pass
     except Exception as error:
         print('closed:', type(error))
