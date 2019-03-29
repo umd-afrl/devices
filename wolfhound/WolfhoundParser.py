@@ -15,8 +15,6 @@ class WolfhoundParser:
 
     WolfHound.write_data([17, 18, 3, 0, 0, 17, 19])
 
-    data = list(WolfHound.read_data(8192))
-
     recordState = 1
     recordID = None
     recordData = []
@@ -81,4 +79,24 @@ class WolfhoundParser:
             self.reset()
         return 0
 
-    WolfHound.write_data([17, 18, 4, 17, 19, 17, 19])
+    while True:
+        wolfData = list(WolfHound.read_data(8192))
+
+        for byte in wolfData:
+            parseByte(byte)
+
+            if recordLength == 7:
+                test1 = '{0:08b}'.format(recordData[2])
+                test2 = '{0:02b}'.format(recordData[3])
+                test3 = test2 + test1
+                test3 = int(test3, 2)
+                print("Frequency: ")
+                print(test3)
+
+                test4 = '{0:08b}'.format(recordData[4])
+                test5 = '{0:02b}'.format(recordData[5])
+                test6 = test5 + test4
+                test6 = int(test6, 2)
+                print("Signal Strength: ")
+                test6 = test6 / 10
+                print(test6)
