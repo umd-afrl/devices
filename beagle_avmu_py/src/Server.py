@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 import os
 import queue
@@ -35,13 +36,14 @@ async def writer(ws):
         while True:
             try:
                 data = QUEUE.get_nowait()
-                await ws.send_json(data, dumps=NumpyComplexArrayEncoder)
+                json.dumps(data, cls=NumpyComplexArrayEncoder)
+                await ws.send_str(data)
                 await asyncio.sleep(0.01)
             except queue.Empty:
                 logging.debug('Data queue empty.')
                 pass
     except Exception as error:
-        print('closed:', type(error))
+        print('closed:', error)
 
 
 async def on_shutdown(app):
