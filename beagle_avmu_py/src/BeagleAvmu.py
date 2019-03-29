@@ -3,7 +3,7 @@ from multiprocessing import Process, Queue, Pipe
 
 import AvmuCapture
 import OneDimDSP
-import WSServer
+import Server
 
 
 def avmu(out_queue: Queue, frequencies: Pipe, scan: bool):
@@ -29,7 +29,7 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
 
 
 def ws(in_queue: Queue):
-    asyncio.ensure_future(WSServer.start(in_queue))
+    asyncio.ensure_future(Server.start(in_queue))
 
 
 if __name__ == '__main__':
