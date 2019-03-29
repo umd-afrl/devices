@@ -12,7 +12,7 @@ class WebsocketServer:
             await asyncio.sleep(0.5)
 
     def get_wolfhound_data(self):
-        return "{'frequency':" + str(self.frequency) + ", 'signal_strength':" + str(self.signal_strength) + "}"
+        return '{"frequency":' + str(self.frequency) + ', "signal_strength":' + str(self.signal_strength) + "}"
 
     def set_wolfhound_data(self, new_freq, new_signal_strength):
         self.signal_strength = new_signal_strength
@@ -21,7 +21,7 @@ class WebsocketServer:
     def start_server(self):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        start_server = websockets.serve(self.handler, '127.0.0.1', 8090)
+        start_server = websockets.serve(self.handler, port=8090)
 
         asyncio.get_event_loop().run_until_complete(start_server)
         asyncio.get_event_loop().run_forever()
