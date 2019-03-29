@@ -9,7 +9,8 @@ def avmu(out_queue: Queue, frequencies: Pipe, scan: bool):
     with AvmuCapture.initialize() as device:
         frequencies.send(AvmuCapture.get_frequencies(device))
         while scan:
-            out_queue.put_nowait(AvmuCapture.capture(device))
+            device.measure()
+            out_queue.put_nowait(device.extractAllPaths()[0][1]['data'])
 
 
 def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
