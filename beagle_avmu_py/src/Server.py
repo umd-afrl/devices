@@ -9,13 +9,14 @@ from aiohttp import web
 
 from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
 
-WEB_ROOT = '/home/debian/ui/controlpanel/'
+# WEB_ROOT = '/home/debian/ui/controlpanel/'
+WEB_ROOT = '/Users/julian/Documents/GitHub/afrl-2019/ui/dist/controlpanel/'
 SERVER = web.Application()
 in_queue = Queue()
 
 cors = aiohttp_cors.setup(SERVER)
 
-client_queues = []
+clients = []
 
 
 async def root_handler(request):
@@ -26,12 +27,12 @@ async def websocket_handler(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
 
-    global client_queues
-    new_queue = asyncio.Queue()
-    client_queues.add(new_queue)
-    await writer(new_queue, ws)
+    global clients
+    clients.append(ws)
 
-    return ws
+    while True:
+        await asyncio.wait(
+            [client.send_str(json.dumps(in_queue.get(), cls=NumpyComplexArrayEncoder)) for client in clients])
 
 
 async def writer(send_queue, socket):
@@ -67,6 +68,9 @@ async def end():
 
 
 if __name__ == '__main__':
-    asyncio.ensure_future(start(Queue(), ip='192.168.1.7', port=8080))
+    asyncio.ensure_future(start(Queue(), ip='localhost', port=8080))
     loop = asyncio.get_event_loop()
+
+    for i in range(1000):
+        in_queue.put_nowait(i)
     loop.run_forever()
