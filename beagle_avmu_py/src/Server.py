@@ -1,8 +1,8 @@
 import asyncio
 import logging
 import os
-from multiprocessing import Queue
 import queue
+from multiprocessing import Queue
 
 import aiohttp_cors
 from aiohttp import web
@@ -14,6 +14,7 @@ SERVER = web.Application()
 QUEUE = Queue()
 
 cors = aiohttp_cors.setup(SERVER)
+
 
 async def root_handler(request):
     return web.FileResponse(os.path.join(WEB_ROOT, 'index.html'))
@@ -68,6 +69,6 @@ async def end():
 
 
 if __name__ == '__main__':
-    asyncio.ensure_future(start(Queue(), ip='localhost', port=8080))
+    asyncio.ensure_future(start(Queue(), ip='192.168.1.7', port=8080))
     loop = asyncio.get_event_loop()
     loop.run_forever()

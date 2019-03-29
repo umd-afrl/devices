@@ -30,6 +30,8 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
 
 def ws(in_queue: Queue):
     asyncio.ensure_future(Server.start(in_queue))
+    loop = asyncio.get_event_loop()
+    loop.run_forever()
 
 
 if __name__ == '__main__':
