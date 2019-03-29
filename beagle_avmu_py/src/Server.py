@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 import os
-from queue import Empty
 from multiprocessing import Queue
 
 import aiohttp_cors
@@ -16,6 +15,8 @@ in_queue = Queue()
 
 cors = aiohttp_cors.setup(SERVER)
 
+client_queues = []
+
 
 async def root_handler(request):
     return web.FileResponse(os.path.join(WEB_ROOT, 'index.html'))
@@ -24,26 +25,20 @@ async def root_handler(request):
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
-    await writer(ws)
-    async for msg in ws:
-        pass
+
+    global client_queues
+    new_queue = asyncio.Queue()
+    client_queues.add(new_queue)
+    await writer(new_queue, ws)
+
     return ws
 
 
-async def writer(ws):
-    try:
-        print('opened')
-        while True:
-            try:
-                global in_queue
-                data = in_queue.get_nowait()
-                json.dumps(data, cls=NumpyComplexArrayEncoder)
-                await ws.send_str(data)
-                await asyncio.sleep(0.01)
-            except Empty:
-                pass
-    except Exception as error:
-        print('closed:', error)
+async def writer(send_queue, socket):
+    while True:
+        data = await send_queue.get()
+        json.dumps(data, cls=NumpyComplexArrayEncoder)
+        await socket.send_str(data)
 
 
 async def on_shutdown(app):
