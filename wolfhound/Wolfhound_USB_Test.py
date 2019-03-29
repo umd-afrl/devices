@@ -42,7 +42,7 @@ WolfHound.write_data([17, 18, 3, 0, 0, 17, 19])
 
 WolfHound.write_data([17, 18, 3, 0, 0, 17, 19])
 
-data = list(WolfHound.read_data(8192))
+#data = list(WolfHound.read_data(8192))
 
 
 recordState = 1
@@ -124,20 +124,40 @@ def parseByte(data):
        reset()
    return 0
 
-WolfHound.write_data([17, 18, 4, 17, 19, 17, 19])
+#WolfHound.write_data([17, 18, 4, 17, 19, 17, 19])
 
 strengthList = []
 
 while True:
+    data = list(WolfHound.read_data(8192))
+    print(data)
+
     for byte in data:
         parseByte(byte)
         print(recordData)
         if recordLength == 7:
+            signalStrength = recordData[4]
+            signalStrength = signalStrength / 100
+            test = '{0:08b}'.format(recordData[2])
+            print(test)
+            test2 = '{0:02b}'.format(recordData[3])
+            print(test2)
+            test3 = test2 + test
+            print(test3)
+            test4 = int(test3, 2)
+            print("Frequency: ")
+            print(test4)
+
+            test4 = '{0:08b}'.format(recordData[4])
+            test5 = '{0:02b}'.format(recordData[5])
+            print(test4)
+            print(test5)
+            test6 = test5 + test4
+            test6 = int(test6, 2)
             print("Signal Strength: ")
-            print(recordData[4])
-            strengthData = recordData[4]
-            strengthList.append(recordData[4])
-        time.sleep(0.5)
+            print(test6)
+
+        time.sleep(0.05)
 
 
 
