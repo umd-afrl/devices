@@ -2,7 +2,7 @@ import asyncio
 import json
 import logging
 import os
-import queue
+from queue import Empty
 from multiprocessing import Queue
 
 import aiohttp_cors
@@ -12,7 +12,7 @@ from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
 
 WEB_ROOT = '/home/debian/ui/controlpanel/'
 SERVER = web.Application()
-QUEUE = Queue()
+in_queue = Queue()
 
 cors = aiohttp_cors.setup(SERVER)
 
@@ -35,12 +35,12 @@ async def writer(ws):
         print('opened')
         while True:
             try:
-                data = QUEUE.get_nowait()
+                global in_queue
+                data = in_queue.get_nowait()
                 json.dumps(data, cls=NumpyComplexArrayEncoder)
                 await ws.send_str(data)
                 await asyncio.sleep(0.01)
-            except queue.Empty:
-                logging.debug('Data queue empty.')
+            except Empty:
                 pass
     except Exception as error:
         print('closed:', error)
