@@ -2,22 +2,16 @@
 #include <WiFi.h>
 const char* ssid     = "NETGEAR65";
 const char* password = "orangeonion830";
-String state = "0";
+bool state = false;
 int pbIn = 12;
+int ledPin = 13;
 WebSocketsServer webSocket = WebSocketsServer(80);
 
-void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t strlength) {
-  Serial.println("EVENT");
-  if(digitalRead(pbIn) == HIGH){
-    state = "0";
-  } else{
-    state = "1";
-  }
-  webSocket.broadcastTXT(state);
-  delay(10);
-}
+// |  ||
+// || |_
 
 void setup() {
+  pinMode(ledPin, OUTPUT);
   pinMode(pbIn, INPUT);
   Serial.begin(115200);
   WiFi.begin(ssid, password);
@@ -29,11 +23,24 @@ void setup() {
   Serial.println(WiFi.localIP());
   //server.begin();
   webSocket.begin();
-  webSocket.onEvent(webSocketEvent);
-  delay(100);
+  //webSocket.onEvent(webSocketEvent);
+  delay(1000);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  state = false;
+  for(int i = 0; i < 100; i++){
+    if(state != true){
+      state = !digitalRead(pbIn);
+    }
+    delay(1);
+  }
+  if(state){
+    webSocket.broadcastTXT("1");
+    digitalWrite(ledPin, HIGH);
+  } else {
+    webSocket.broadcastTXT("0");
+    digitalWrite(ledPin, LOW);
+  }
   webSocket.loop();
 }
