@@ -15,8 +15,6 @@ class WolfhoundParser:
 
     WolfHound.write_data([17, 18, 3, 0, 0, 17, 19])
 
-    data = list(WolfHound.read_data(8192))
-
     recordState = 1
     recordID = None
     recordData = []
@@ -66,11 +64,11 @@ class WolfhoundParser:
         elif self.recordState == 6:
             if data == 19:
                 self.recordState = 7
-                print("Complete Record!")
+                # print("Complete Record!")
                 if self.checksum() != 0:
                     self.recordState = 1
-                print("Valid Record")
-                print(self.recordLength)
+                # print("Valid Record")
+                # print(self.recordLength)
             elif self.recordState == 20:
                 self.recordState = 5
                 self.recordLength += 1
@@ -80,5 +78,3 @@ class WolfhoundParser:
         if self.recordState == 1:
             self.reset()
         return 0
-
-    WolfHound.write_data([17, 18, 4, 17, 19, 17, 19])
