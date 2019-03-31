@@ -9,8 +9,7 @@ from aiohttp import web
 
 from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
 
-# WEB_ROOT = '/home/debian/ui/controlpanel/'
-WEB_ROOT = '/Users/julian/Documents/GitHub/afrl-2019/ui/dist/controlpanel/'
+WEB_ROOT = '/home/debian/ui/controlpanel/'
 SERVER = web.Application()
 in_queue = Queue()
 
@@ -31,6 +30,9 @@ async def websocket_handler(request):
     clients.append(ws)
 
     while True:
+        for client in clients:
+            if client.closed:
+                clients.remove(client)
         await asyncio.wait(
             [client.send_str(json.dumps(in_queue.get(), cls=NumpyComplexArrayEncoder)) for client in clients])
 
@@ -49,12 +51,12 @@ async def on_shutdown(app):
 
 
 async def start(queue: Queue, ip='192.168.1.7', port=8080):
-    global SERVER, runner, site, QUEUE
+    global SERVER, runner, site, in_queue
     SERVER.on_shutdown.append(on_shutdown)
     SERVER.router.add_get('/', root_handler)
     SERVER.router.add_get('/ws', websocket_handler)
     SERVER.router.add_static(prefix='/', path=WEB_ROOT)
-    QUEUE = queue
+    in_queue = queue
     logging.basicConfig(level=logging.DEBUG)
     runner = web.AppRunner(SERVER)
     await runner.setup()
