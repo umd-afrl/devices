@@ -15,7 +15,7 @@ in_queue = Queue()
 
 cors = aiohttp_cors.setup(SERVER)
 
-clients = []
+clients = set()
 
 
 async def root_handler(request):
@@ -27,14 +27,18 @@ async def websocket_handler(request):
     await ws.prepare(request)
 
     global clients
-    clients.append(ws)
+    clients.add(ws)
 
     while True:
-        for client in clients:
-            if client.closed:
-                clients.remove(client)
-        await asyncio.wait(
-            [client.send_str(json.dumps(in_queue.get(), cls=NumpyComplexArrayEncoder)) for client in clients])
+        try:
+            await asyncio.wait(
+                [client.send_str(json.dumps(in_queue.get(), cls=NumpyComplexArrayEncoder)) for client in clients])
+            await asyncio.sleep(0)
+        except:
+            await ws.close()
+            clients.remove(ws)
+
+    return ws
 
 
 async def writer(send_queue, socket):

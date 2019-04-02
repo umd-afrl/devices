@@ -66,7 +66,7 @@ def detect_peaks(x, num_train, num_guard, rate_fa, axis):
         threshold = alpha * p_noise
 
         if x[i] > threshold:
-            peak_idx.append((axis[i], .5))
+            peak_idx.append((i, .5))
 
     peak_idx = np.array(peak_idx, dtype=float)
 
