@@ -46,7 +46,7 @@ def coherent_change_detection(data, previous):
         return np.reshape(data, (1, 2048))
 
 
-def detect_peaks(x, num_train, num_guard, rate_fa, axis):
+def detect_peaks(x, num_train, num_guard, rate_fa):
     num_cells = x.size
     num_train_half = round(num_train / 2)
     num_guard_half = round(num_guard / 2)
