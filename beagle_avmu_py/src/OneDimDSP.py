@@ -2,17 +2,17 @@ import numpy as np
 import scipy.signal.windows
 
 
-def apply_window(sweep_data):
-    return np.multiply(sweep_data, scipy.signal.windows.chebwin(len(sweep_data), 45))
+def apply_window(sweep_data, num_points):
+    return np.multiply(sweep_data, scipy.signal.windows.chebwin(num_points, 45))
 
 
-def pad_data(sweep_data, front_padding_count):
+def pad_and_ifft(sweep_data, front_padding_count):
     padded_data = []
     while len(padded_data) < front_padding_count:
         padded_data.append(0)
     padded_data.extend(sweep_data)
 
-    powers_of_two = [2 ** x for x in range(8, 16)]
+    powers_of_two = [2 ** x for x in range(16)]
 
     final_size = powers_of_two[0]
     for size in powers_of_two:
@@ -23,7 +23,7 @@ def pad_data(sweep_data, front_padding_count):
     while len(padded_data) < final_size:
         padded_data.append(0)
 
-    return np.array(padded_data)
+    return np.fft.ifft(np.array(padded_data))
 
 
 def get_axis_and_padding(frequencies, cable_delays, num_points):
@@ -66,8 +66,6 @@ def detect_peaks(x, num_train, num_guard, rate_fa, axis):
         threshold = alpha * p_noise
 
         if x[i] > threshold:
-            peak_idx.append((i, .5))
-
-    peak_idx = np.array(peak_idx, dtype=float)
+            peak_idx.append(i)
 
     return peak_idx

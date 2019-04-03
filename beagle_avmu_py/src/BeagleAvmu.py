@@ -21,8 +21,8 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
     while process:
         previous_data = range_data
         data = in_queue.get(True)
-        data = OneDimDSP.apply_window(data)
-        range_data = OneDimDSP.pad_data(data, front_padding_count)
+        data = OneDimDSP.apply_window(data, 1024)
+        range_data = OneDimDSP.pad_and_ifft(data, front_padding_count)
         change = OneDimDSP.coherent_change_detection(range_data, previous_data)
         peaks = OneDimDSP.detect_peaks(data, 100, 300, 1e-4, axis)
         out_queue.put_nowait((change, peaks))
