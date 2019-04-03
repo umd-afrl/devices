@@ -23,7 +23,7 @@ def pad_and_ifft(sweep_data, front_padding_count):
     while len(padded_data) < final_size:
         padded_data.append(0)
 
-    return np.fft.ifft(np.array(padded_data))
+    return np.fft.ifft(padded_data)
 
 
 def get_axis_and_padding(frequencies, cable_delays, num_points):
@@ -39,11 +39,10 @@ def get_axis_and_padding(frequencies, cable_delays, num_points):
 
 
 def coherent_change_detection(data, previous):
-    if previous is not None:
-        diff_ccd = np.abs(data - previous)
-        return np.reshape(diff_ccd, (1, 2048))
-    else:
-        return np.reshape(data, (1, 2048))
+    if previous is None:
+        previous = np.zeros((1, 2048))
+    diff_ccd = np.abs(data - previous)
+    return np.reshape(diff_ccd, (1, 2048))
 
 
 def detect_peaks(x, num_train, num_guard, rate_fa):
