@@ -1,0 +1,14 @@
+[Unit]
+Description=SnakeScope Audio
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=/usr/bin/env arecord -D plughw:1,0 -r 44100 -f S16_LE -B 10 | aplay -D plughw:1,0
+
+[Install]
+WantedBy=multi-user.target
