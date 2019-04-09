@@ -2,7 +2,7 @@ import asyncio
 import json
 import logging
 import os
-from multiprocessing import Queue
+from multiprocessing import Queue, Pipe
 
 import aiohttp_cors
 from aiohttp import web
@@ -12,6 +12,7 @@ from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
 WEB_ROOT = '/home/debian/ui/controlpanel/'
 SERVER = web.Application()
 in_queue = Queue()
+toggle_queue = Queue()
 
 cors = aiohttp_cors.setup(SERVER)
 
@@ -20,7 +21,6 @@ clients = set()
 
 async def root_handler(request):
     return web.FileResponse(os.path.join(WEB_ROOT, 'index.html'))
-
 
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
@@ -47,6 +47,8 @@ async def writer(send_queue, socket):
         json.dumps(data, cls=NumpyComplexArrayEncoder)
         await socket.send_str(data)
 
+async def toggle_handler(request):
+    toggle_queue.put_nowait("toggle")
 
 async def on_shutdown(app):
     # close peer connections
@@ -54,13 +56,15 @@ async def on_shutdown(app):
         await socket.close()
 
 
-async def start(queue: Queue, ip='192.168.1.7', port=8080):
+async def start(queue: Queue, toggle: Queue, ip='192.168.1.7', port=8080):
     global SERVER, runner, site, in_queue
     SERVER.on_shutdown.append(on_shutdown)
     SERVER.router.add_get('/', root_handler)
     SERVER.router.add_get('/ws', websocket_handler)
     SERVER.router.add_static(prefix='/', path=WEB_ROOT)
+    SERVER.router.add_get('/toggleavmu', toggle_handler)
     in_queue = queue
+    toggle_queue = toggle
     logging.basicConfig(level=logging.DEBUG)
     runner = web.AppRunner(SERVER)
     await runner.setup()

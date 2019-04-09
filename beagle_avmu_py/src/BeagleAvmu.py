@@ -5,13 +5,18 @@ import AvmuCapture
 import OneDimDSP
 import Server
 
-
-def avmu(out_queue: Queue, frequencies: Pipe, scan: bool):
+def avmu(out_queue: Queue, frequencies: Pipe, toggle: Queue, should: bool):
     with AvmuCapture.initialize() as device:
         frequencies.send(AvmuCapture.get_frequencies(device))
-        while scan:
-            device.measure()
-            out_queue.put_nowait(device.extractAllPaths()[0][1]['data'])
+        while True:
+            if toggle.get_nowait() == "toggle":
+                scan = not scan
+            while scan:
+                if toggle.get_nowait() == "toggle":
+                    scan = not scan
+                device.measure()
+                out_queue.put_nowait(device.extractAllPaths()[0][1]['data'])
+
 
 
 def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
@@ -28,22 +33,23 @@ def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
         out_queue.put_nowait((change, peaks))
 
 
-def ws(in_queue: Queue):
-    asyncio.ensure_future(Server.start(in_queue))
+def ws(in_queue: Queue, toggle_queue: Queue):
+    asyncio.ensure_future(Server.start(in_queue, toggle_queue))
     loop = asyncio.get_event_loop()
     loop.run_forever()
 
 
 if __name__ == '__main__':
     (frequencies_in, frequencies_out) = Pipe(False)
+    toggle_queue = Queue()
     raw_queue = Queue()
     processed_queue = Queue()
 
-    avmu_process = Process(target=avmu, args=(raw_queue, frequencies_out, True))
+    avmu_process = Process(target=avmu, args=(raw_queue, frequencies_out, toggle_queue, True))
     avmu_process.start()
 
     dsp_process = Process(target=dsp, args=(raw_queue, processed_queue, frequencies_in, True))
     dsp_process.start()
 
-    ws_process = Process(target=ws, args=(processed_queue,))
+    ws_process = Process(target=ws, args=(processed_queue, toggle_queue))
     ws_process.start()
