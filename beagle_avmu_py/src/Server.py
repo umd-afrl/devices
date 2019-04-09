@@ -36,12 +36,15 @@ async def websocket_handler(request):
 
 async def send_data(app):
     while True:
+        # print(len(app['websockets']))
         try:
             data = in_queue.get_nowait()
         except queue.Empty:
             pass
+        # print(data)
         for client in app['websockets']:
             await client.send_str(json.dumps(data, cls=NumpyComplexArrayEncoder))
+        # print('all done')
         await asyncio.sleep(0)
 
 
@@ -58,10 +61,13 @@ async def toggle_handler(request):
 
 
 async def on_startup(app):
+    # loop = asyncio.get_event_loop()
+    # app['queue_listener'] = loop.create_task(send_data(app))
     app['websockets'] = set()
 
 
 async def on_shutdown(app):
+    # close peer connections
     for socket in set(app['websockets']):
         await socket.close()
 
