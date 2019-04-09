@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+import queue
 from multiprocessing import Queue
 
 import aiohttp_cors
@@ -12,10 +13,9 @@ from NumpyComplexArrayEncoder import NumpyComplexArrayEncoder
 WEB_ROOT = '/home/debian/ui/controlpanel/'
 SERVER = web.Application()
 in_queue = Queue()
+toggle_queue = Queue()
 
 cors = aiohttp_cors.setup(SERVER)
-
-clients = set()
 
 
 async def root_handler(request):
@@ -26,19 +26,23 @@ async def websocket_handler(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
 
-    global clients
-    clients.add(ws)
+    print('Adding client')
+    request.app['websockets'].add(ws)
 
-    while True:
-        try:
-            await asyncio.wait(
-                [client.send_str(json.dumps(in_queue.get(), cls=NumpyComplexArrayEncoder)) for client in clients])
-            await asyncio.sleep(0)
-        except:
-            await ws.close()
-            clients.remove(ws)
+    await send_data(request.app)
 
     return ws
+
+
+async def send_data(app):
+    while True:
+        try:
+            data = in_queue.get_nowait()
+        except queue.Empty:
+            pass
+        for client in app['websockets']:
+            await client.send_str(json.dumps(data, cls=NumpyComplexArrayEncoder))
+        await asyncio.sleep(0)
 
 
 async def writer(send_queue, socket):
@@ -48,19 +52,30 @@ async def writer(send_queue, socket):
         await socket.send_str(data)
 
 
+async def toggle_handler(request):
+    toggle_queue.put_nowait("toggle")
+    return web.Response()
+
+
+async def on_startup(app):
+    app['websockets'] = set()
+
+
 async def on_shutdown(app):
-    # close peer connections
     for socket in set(app['websockets']):
         await socket.close()
 
 
-async def start(queue: Queue, ip='192.168.1.7', port=8080):
-    global SERVER, runner, site, in_queue
+async def start(queue: Queue, toggle: Queue, ip='192.168.1.7', port=8080):
+    global SERVER, runner, site, in_queue, toggle_queue
+    SERVER.on_startup.append(on_startup)
     SERVER.on_shutdown.append(on_shutdown)
     SERVER.router.add_get('/', root_handler)
     SERVER.router.add_get('/ws', websocket_handler)
+    SERVER.router.add_post('/toggleavmu', toggle_handler)
     SERVER.router.add_static(prefix='/', path=WEB_ROOT)
     in_queue = queue
+    toggle_queue = toggle
     logging.basicConfig(level=logging.DEBUG)
     runner = web.AppRunner(SERVER)
     await runner.setup()
@@ -74,7 +89,7 @@ async def end():
 
 
 if __name__ == '__main__':
-    asyncio.ensure_future(start(Queue(), ip='localhost', port=8080))
+    asyncio.ensure_future(start(Queue(), Queue(), ip='localhost', port=8080))
     loop = asyncio.get_event_loop()
 
     for i in range(1000):
