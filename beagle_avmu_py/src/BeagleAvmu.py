@@ -12,13 +12,13 @@ def avmu(out_queue: Queue, frequencies: Pipe, toggle: Queue, should: bool):
             try:
                 if toggle.get_nowait() == "toggle":
                     scan = not scan
-            except Queue.Empty:
+            except queue.Empty:
                 pass
             while scan:
                 try:
                     if toggle.get_nowait() == "toggle":
                         scan = not scan
-                except Queue.Empty:
+                except queue.Empty:
                     pass
                 device.measure()
                 out_queue.put_nowait(device.extractAllPaths()[0][1]['data'])
