@@ -2,8 +2,8 @@ import asyncio
 import json
 import logging
 import os
+from multiprocessing import Queue, Pipe
 import queue
-from multiprocessing import Queue
 
 import aiohttp_cors
 from aiohttp import web
@@ -21,9 +21,8 @@ cors = aiohttp_cors.setup(SERVER)
 async def root_handler(request):
     return web.FileResponse(os.path.join(WEB_ROOT, 'index.html'))
 
-
 async def websocket_handler(request):
-    ws = web.WebSocketResponse()
+    ws = web.WebSocketResponse(autoclose=False, compress=False)
     await ws.prepare(request)
 
     print('Adding client')
@@ -36,15 +35,16 @@ async def websocket_handler(request):
 
 async def send_data(app):
     while True:
-        # print(len(app['websockets']))
+       # print(len(app['websockets']))
         try:
             data = in_queue.get_nowait()
+        #print(data)
+            for client in app['websockets']:
+                await client.send_str(json.dumps(data, cls=NumpyComplexArrayEncoder))
+                await asyncio.sleep(0)
         except queue.Empty:
             pass
-        # print(data)
-        for client in app['websockets']:
-            await client.send_str(json.dumps(data, cls=NumpyComplexArrayEncoder))
-        # print('all done')
+       # print('all done')
         await asyncio.sleep(0)
 
 
@@ -61,8 +61,8 @@ async def toggle_handler(request):
 
 
 async def on_startup(app):
-    # loop = asyncio.get_event_loop()
-    # app['queue_listener'] = loop.create_task(send_data(app))
+    #loop = asyncio.get_event_loop()
+    #app['queue_listener'] = loop.create_task(send_data(app))
     app['websockets'] = set()
 
 

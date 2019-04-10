@@ -1,14 +1,14 @@
 import asyncio
-import queue
 from multiprocessing import Process, Queue, Pipe
+import queue
+import time
 
 import AvmuCapture
 import OneDimDSP
 import Server
 
-
 def avmu(out_queue: Queue, frequencies: Pipe, toggle: Queue, scan: bool):
-    with AvmuCapture.initialize() as device:
+    with AvmuCapture.initialize(hop_rate='HOP_15K') as device:
         frequencies.send(AvmuCapture.get_frequencies(device))
         while True:
             try:
@@ -23,7 +23,6 @@ def avmu(out_queue: Queue, frequencies: Pipe, toggle: Queue, scan: bool):
             if scan:
                 device.measure()
                 out_queue.put_nowait(device.extractAllPaths()[0][1]['data'])
-
 
 def dsp(in_queue: Queue, out_queue: Queue, frequencies: Pipe, process: bool):
     freq = frequencies.recv()
