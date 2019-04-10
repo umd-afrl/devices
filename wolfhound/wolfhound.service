@@ -7,7 +7,7 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=1
-User=pi
+User=root
 ExecStart=/usr/bin/env python3 /home/pi/devices/wolfhound/Wolfhound.py
 
 [Install]
