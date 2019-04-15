@@ -20,12 +20,17 @@ Open the Radar Operator&#39;s black Pelican case.
 3. Power on the battery velcroed into the pelican case. If the battery is not charged, you may not proceed with the procedure until it is charged. When the battery is powered on you should see lights blinking on the router and later hear the fan on the beagle board spinning. Do not tip or jostle around pelican case.
 4. On a separate computer, connect to the network "Netgear65" with password "orangeonion830"
 5. In an SSH client on that computer, enter the following commands:
-   1. ssh debian@192.168.1.7
-   2. When prompted for a password, enter "temppwd"
-   3. cd ~/devices/beagle_avmu_py/src
-   4. python3 BeagleAvmu.py
+```
+   ssh debian@192.168.1.7
+```
+   When prompted for a password, enter
+   ```
+   temppwd
+   cd ~/devices/beagle_avmu_py/src
+   python3 BeagleAvmu.py
+```
 
-_The router provides the local area network (LAN) that the devices connect to. Sensor data is transported from the sensors through the LAN and onto the User Interface. On power up the Beagle Board starts the User Interface. If the AVMU was still there the Beagle Board would also start collecting data from the AVMU._
+_The router provides the local area network (LAN) that the devices connect to. Sensor data is transported from the sensors through the LAN and onto the User Interface.  If the AVMU was still there the Beagle Board would start collecting data from the AVMU on powerup._
 
 1. Once components are powered on, while maintaining current orientation close pelican case, and set the Pelican case aside.
 
