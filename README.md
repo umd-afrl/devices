@@ -6,12 +6,11 @@ Here is what to expect in this guide: First the radar operator&#39;s gear will b
 
 **During the removal of the AVMU at the competition, the routers epoxy broke and it is now loose in the pelican case. Therefore, only orient the pelican case in the manner shown below.**
 
-** **
 **The Phone Detector&#39;s data port has the USB cable hot glued into place. This is because the COTS Wolfhound was not designed to be plugged in and transported simultaneously. Don&#39;t break the seal.**
 
-** **
-
 **Radar Operator**
+
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
 
 Figure 1: Orientation of the Radar Operator&#39;s Pelican case and components inside.
 
@@ -41,6 +40,7 @@ Figure 3: Names of SnakeScope components
  6.  the power cable for the Raspberry Pi&#39;s into the large black USB Power Supply
 3. Place the headphones in your ears.
 4. Power on the Phone Detector by pressing the black button in the middle of the key pad. You should see a screen similar to this below…
+
 
 Figure 4: Phone Detector default
 
