@@ -1,34 +1,34 @@
-**QUICK START GUIDE**
+# UMD MATES Quick Start Guide
 
 Here is what to expect in this guide: First the radar operator&#39;s gear will be prepared, then the field operator&#39;s, next the iPads will be prepared, and last an operator can choose to wear the equipment and operate it. **ORDER MATTERS.** _Words in italics describe what is going on in the software._
 
-**ATTENTION BEFORE SETUP**
 
-**During the removal of the AVMU at the competition, the routers epoxy broke and it is now loose in the pelican case. Therefore, only orient the pelican case in the manner shown below.**
+## Attention: Before Setup
 
-**The Phone Detector&#39;s data port has the USB cable hot glued into place. This is because the COTS Wolfhound was not designed to be plugged in and transported simultaneously. Don&#39;t break the seal.**
+During the removal of the AVMU at the competition, the router's epoxy broke and it is now loose in the pelican case. Caution is advised to avoid damage to the contents of the case.
 
-**Radar Operator**
+The Mini USB B port on the Wolfhound Pro has the cable hot glued into place. This is because it was not designed to be plugged in and transported simultaneously. Removing the glue may damage the USB port, do so at your own risk.
+
+## Radar Operator
 
 ![alt text](media/internals.jpg)
 
-Figure 1: Orientation of the Radar Operator&#39;s Pelican case and components inside.
+Figure 1: Orientation of the Radar Operator's Pelican case and components inside.
 
-1. **Orient the pelican case as shown above.**
-Open the Radar Operator&#39;s black Pelican case.
-2. Lift off the wood panel that the AVMU antenna were mounted on to reveal battery.
+
+1. Orient the pelican case as shown in Figure 1. Open the case.
+2. Lift off wooden radar antenna mounting plate to reveal other components.
 3. Power on the battery velcroed into the pelican case. If the battery is not charged, you may not proceed with the procedure until it is charged. When the battery is powered on you should see lights blinking on the router and later hear the fan on the beagle board spinning. Do not tip or jostle around pelican case.
-4. On a separate computer, connect to the network "Netgear65" with password "orangeonion830"
+4. On a separate computer (or the supplied iPad with the Terminus app installed), connect to the Wifi network `NETGEAR65` with password `orangeonion830`
 5. In an SSH client on that computer, enter the following commands:
-```
-   ssh debian@192.168.1.7
-```
-   When prompted for a password, enter
-   ```
-   temppwd
-   cd ~/devices/beagle_avmu_py/src
-   python3 BeagleAvmu.py
-```
+       
+       ssh debian@192.168.1.7
+    
+    When prompted for a password, enter `temppwd`
+    ```
+    cd ~/devices/beagle_avmu_py/src
+    python3 BeagleAvmu.py
+    ```
 
 _The router provides the local area network (LAN) that the devices connect to. Sensor data is transported from the sensors through the LAN and onto the User Interface.  If the AVMU was still there the Beagle Board would start collecting data from the AVMU on powerup._
 
@@ -74,7 +74,7 @@ _As the Motion Detector powers on it connects to the LAN so that the data can be
 **iPads**
 
 1. Power on an iPad. If the iPad is not charged, you may not proceed with the procedure until it is charged.
-2. Navigate to the iPad&#39;s wifi options and make sure it is connected to &quot;Netgear65&quot; this is the local area network being broadcasted. If you are prompted for a password it is  &quot;orangeonion830&quot;.
+2. Navigate to the iPad&#39;s wifi options and make sure it is connected to `NETGEAR65` this is the local area network being broadcasted. If you are prompted for a password it is  &quot;orangeonion830&quot;.
 3. Navigate to the iPad&#39;s Safari options in settings, scroll down, and click the blue &quot;clear all&quot; button.
 4. Open Safari and type in the web bar &quot;192.168.1.7:8080&quot; this is the web address of the user interface being hosted by the beagle board. You should see this...
 
