@@ -28,6 +28,7 @@ _The router provides the local area network (LAN) that the devices connect to. S
 ![alt text](media/fannypack.jpg)
 Figure 2: Field Operator&#39;s lumbar pack and components inside.
 
+![alt text](media/snakescope_parts.png)
 Figure 3: Names of SnakeScope components
 
 1. Check the power level of the large black USB power pack and the two white smaller power packs. They were left in the lumbar pack at the university. If they are not charged you may not proceed with the procedure until it is charged.
@@ -42,13 +43,14 @@ Figure 3: Names of SnakeScope components
 3. Place the headphones in your ears.
 4. Power on the Phone Detector by pressing the black button in the middle of the key pad. You should see a screen similar to this below…
 
-
+![alt text](media/phone_detector_default.png)
 Figure 4: Phone Detector default
 
 If the phone detector is not charged, you may not proceed with the procedure until it is charged.
 
 1. Power on the Raspberry Pi by pressing the button on the power cord. As the Raspberry Pi is turning on you will start to hear sound coming from the headphones and the Phone Detector will turn to this screen…
 
+![alt text](media/usb_control.png)
 Figure 5: Phone Detector as Raspberry Pi is connected to it.
 
 _As the Raspberry Pi powers on three services run. The first starts the microphone collection, the second starts the Phone Detector data collection/ transportation, and the third starts the SnakeScope data collection/ transportation._
