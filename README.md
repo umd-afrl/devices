@@ -34,7 +34,7 @@ _The router provides the local area network (LAN) that the devices connect to. S
 
 1. Once components are powered on, while maintaining current orientation close pelican case, and set the Pelican case aside.
 
-**Field Operator**
+## Field Operator
 
 ![alt text](media/fannypack.jpg)
 Figure 2: Field Operator&#39;s Lumbar Pack and Components Inside.
@@ -71,7 +71,7 @@ _As the Motion Detector powers on it connects to the LAN so that the data can be
 
 
 
-**iPads**
+## iPads
 
 1. Power on an iPad. If the iPad is not charged, you may not proceed with the procedure until it is charged.
 2. Navigate to the iPad&#39;s wifi options and make sure it is connected to `NETGEAR65` this is the local area network being broadcasted. If you are prompted for a password it is  &quot;orangeonion830&quot;.
@@ -90,7 +90,7 @@ Figure 5: Working User Interface
 
 
 
-**Wearing the Equipment**
+## Wearing the Equipment
 
 Shown in Figure 6 is how the equipment is worn by the field operator. Without the AVMU in the Radar Operator&#39;s pelican case, the pelican case is solely there to provide the LAN and the User Interface.
 ![alt text](media/field_operator_gear_on.jpg)
