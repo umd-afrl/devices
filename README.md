@@ -13,7 +13,7 @@ The Mini USB B port on the Wolfhound Pro has the cable hot glued into place. Thi
 
 ![alt text](media/internals.jpg)
 
-Figure 1: Orientation of the Radar Operator's Pelican case and components inside.
+Figure 1: Orientation of the Radar Operator's Pelican Case and Components Inside.
 
 
 1. Orient the pelican case as shown in Figure 1. Open the case.
@@ -37,17 +37,17 @@ _The router provides the local area network (LAN) that the devices connect to. S
 **Field Operator**
 
 ![alt text](media/fannypack.jpg)
-Figure 2: Field Operator&#39;s lumbar pack and components inside.
+Figure 2: Field Operator&#39;s Lumbar Pack and Components Inside.
 
 ![alt text](media/snakescope_parts.png)
-Figure 3: Names of SnakeScope components
+Figure 3: Names of SnakeScope Components
 
 1. Check the power level of the large black USB power pack and the two white smaller power packs. They were left in the lumbar pack at the university. If they are not charged you may not proceed with the procedure until it is charged.
-2. Before powering on the field operators raspberry pi, plug in (if not plugged in already):
+2. Before powering on the field operators Raspberry Pi, plug in (if not plugged in already):
    1. the Phone Detector in one of the Raspberry Pi&#39;s USBs. **Be mindful of the hot glue seal.**
    2. the SnakeScope camera in one of the Raspberry Pi&#39;s USBs
-   3.  the SnakeScope Microphone Input in one of the Raspberry Pi&#39;s USBs
-   4.  the SnakeScope Microphone Input&#39;s two power cables, plug each one into its own small white power pack. Note the picture above shows one of the microphone cables connected to the black power supply but now each microphone power cable gets its own white power pack.
+   3. the SnakeScope Microphone Input in one of the Raspberry Pi&#39;s USBs
+   4. the SnakeScope Microphone Input&#39;s two power cables, plug each one into its own small white power pack. Note the picture above shows one of the microphone cables connected to the black power supply but now each microphone power cable gets its own white power pack.
    5. the headphones into the Raspberry Pi&#39;s Auxiliary Port
    6.  the power cable for the Raspberry Pi&#39;s into the large black USB Power Supply
 3. Place the headphones in your ears.
@@ -55,7 +55,7 @@ Figure 3: Names of SnakeScope components
 
 ![alt text](media/phone_detector_default.png)
 
-Figure 4: Phone Detector default
+Figure 4: Phone Detector Default
 
 If the phone detector is not charged, you may not proceed with the procedure until it is charged.
 
@@ -76,7 +76,7 @@ _As the Motion Detector powers on it connects to the LAN so that the data can be
 1. Power on an iPad. If the iPad is not charged, you may not proceed with the procedure until it is charged.
 2. Navigate to the iPad&#39;s wifi options and make sure it is connected to `NETGEAR65` this is the local area network being broadcasted. If you are prompted for a password it is  &quot;orangeonion830&quot;.
 3. Navigate to the iPad&#39;s Safari options in settings, scroll down, and click the blue &quot;clear all&quot; button.
-4. Open Safari and type in the web bar &quot;192.168.1.7:8080&quot; this is the web address of the user interface being hosted by the beagle board. You should see this...
+4. Open Safari and type in the web bar &quot;192.168.1.7:8080&quot; this is the web address of the user interface being hosted by the beagle board. You should see on the iPad what is shown in Figure 6.
 
 
 ![alt text](media/user_interface.JPG)
@@ -92,7 +92,7 @@ Figure 6: Working User Interface
 
 **Wearing the Equipment**
 
-Here is how we mounted the equipment to the field operator. Without the AVMU in the Radar Operator&#39;s pelican case, the pelican case is solely there to provide the LAN and the User Interface.
+Shown in Figure 7 is how the equipment is worn by the field operator. Without the AVMU in the Radar Operator&#39;s pelican case, the pelican case is solely there to provide the LAN and the User Interface.
 ![alt text](media/field_operator_gear_on.jpg)
-
+Figure 7: Field Operator with all Equipment Mounted
 
