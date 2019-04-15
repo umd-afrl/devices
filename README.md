@@ -96,3 +96,29 @@ Shown in Figure 6 is how the equipment is worn by the field operator. Without th
 ![alt text](media/field_operator_gear_on.jpg)
 Figure 6: Field Operator with all Equipment Mounted
 
+# Troubleshooting
+**The Cellphone Detector does not display "USB Control"**
+1. Ensure USB cable from the cellphone detector is plugged into raspberry pi
+2. If off, turn on the cellphone detector
+3. Restart the raspberry pi using the power button on the power cable
+
+**The LED on the glasses does not blink**
+1. Turn off the glasses and the motion sensor
+2. Ensure NETGEAR65 is listed as an available WiFi network
+3. Turn on motion detector and wait for green light on top to blink
+4. Turn on the glasses
+
+**The server running on the BeagleBoard crashes**
+**If the UI is not reachable on the iPad, follow these steps**
+1. In an SSH client on that computer, enter the following commands:
+       
+       ssh debian@192.168.1.7
+    
+2. When prompted for a password, enter `temppwd`
+3. When the prompt appears, enter the following commands
+    ```
+    cd ~/devices/beagle_avmu_py/src
+    killall python3
+    python3 BeagleAvmu.py
+    ```
+3. Refresh the page on the iPad
