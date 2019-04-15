@@ -18,6 +18,12 @@ Figure 1: Orientation of the Radar Operator&#39;s Pelican case and components in
 Open the Radar Operator&#39;s black Pelican case.
 2. Lift off the wood panel that the AVMU antenna were mounted on to reveal battery.
 3. Power on the battery velcroed into the pelican case. If the battery is not charged, you may not proceed with the procedure until it is charged. When the battery is powered on you should see lights blinking on the router and later hear the fan on the beagle board spinning. Do not tip or jostle around pelican case.
+4. On a separate computer, connect to the network "Netgear65" with password "orangeonion830"
+5. In an SSH client on that computer, enter the following commands:
+   1. ssh debian@192.168.1.7
+   2. When prompted for a password, enter "temppwd"
+   3. cd ~/devices/beagle_avmu_py/src
+   4. python3 BeagleAvmu.py
 
 _The router provides the local area network (LAN) that the devices connect to. Sensor data is transported from the sensors through the LAN and onto the User Interface. On power up the Beagle Board starts the User Interface. If the AVMU was still there the Beagle Board would also start collecting data from the AVMU._
 
@@ -32,26 +38,23 @@ Figure 2: Field Operator&#39;s lumbar pack and components inside.
 Figure 3: Names of SnakeScope components
 
 1. Check the power level of the large black USB power pack and the two white smaller power packs. They were left in the lumbar pack at the university. If they are not charged you may not proceed with the procedure until it is charged.
-2. Before powering on the field operators raspberry pi plug in (if not plugged in already)…
- 1. the Phone Detector in one of the Raspberry Pi&#39;s USBs.
-**Be mindful of the hot glue seal.**
- 2. the SnakeScope camera in one of the Raspberry Pi&#39;s USBs
- 3.  the SnakeScope Microphone Input in one of the Raspberry Pi&#39;s USBs
- 4.  the SnakeScope Microphone Input&#39;s two power cables, plug each one into its own small white power pack. Note the picture above shows one of the microphone cables connected to the black power supply but now each microphone power cable gets its own white power pack.
- 5. the headphones into the Raspberry Pi&#39;s Auxiliary Port
- 6.  the power cable for the Raspberry Pi&#39;s into the large black USB Power Supply
+2. Before powering on the field operators raspberry pi, plug in (if not plugged in already):
+   1. the Phone Detector in one of the Raspberry Pi&#39;s USBs. **Be mindful of the hot glue seal.**
+   2. the SnakeScope camera in one of the Raspberry Pi&#39;s USBs
+   3.  the SnakeScope Microphone Input in one of the Raspberry Pi&#39;s USBs
+   4.  the SnakeScope Microphone Input&#39;s two power cables, plug each one into its own small white power pack. Note the picture above shows one of the microphone cables connected to the black power supply but now each microphone power cable gets its own white power pack.
+   5. the headphones into the Raspberry Pi&#39;s Auxiliary Port
+   6.  the power cable for the Raspberry Pi&#39;s into the large black USB Power Supply
 3. Place the headphones in your ears.
 4. Power on the Phone Detector by pressing the black button in the middle of the key pad. You should see a screen similar to this below…
 
 ![alt text](media/phone_detector_default.png)
+
 Figure 4: Phone Detector default
 
 If the phone detector is not charged, you may not proceed with the procedure until it is charged.
 
-1. Power on the Raspberry Pi by pressing the button on the power cord. As the Raspberry Pi is turning on you will start to hear sound coming from the headphones and the Phone Detector will turn to this screen…
-
-![alt text](media/usb_control.png)
-Figure 5: Phone Detector as Raspberry Pi is connected to it.
+1. Power on the Raspberry Pi by pressing the button on the power cord. As the Raspberry Pi is turning on you will start to hear sound coming from the headphones and the Phone Detector will display the text "USB Control"
 
 _As the Raspberry Pi powers on three services run. The first starts the microphone collection, the second starts the Phone Detector data collection/ transportation, and the third starts the SnakeScope data collection/ transportation._
 
@@ -86,3 +89,5 @@ Figure 6: Working User Interface
 
 Here is how we mounted the equipment to the field operator. Without the AVMU in the Radar Operator&#39;s pelican case, the pelican case is solely there to provide the LAN and the User Interface.
 ![alt text](media/field_operator_gear_on.jpg)
+
+
