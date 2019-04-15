@@ -10,7 +10,7 @@ Here is what to expect in this guide: First the radar operator&#39;s gear will b
 
 **Radar Operator**
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](media/internals.jpg)
 
 Figure 1: Orientation of the Radar Operator&#39;s Pelican case and components inside.
 
@@ -25,6 +25,7 @@ _The router provides the local area network (LAN) that the devices connect to. S
 
 **Field Operator**
 
+![alt text](media/fannypack.jpg)
 Figure 2: Field Operator&#39;s lumbar pack and components inside.
 
 Figure 3: Names of SnakeScope components
@@ -68,7 +69,7 @@ _As the Motion Detector powers on it connects to the LAN so that the data can be
 4. Open Safari and type in the web bar &quot;192.168.1.7:8080&quot; this is the web address of the user interface being hosted by the beagle board. You should see this...
 
 
-
+![alt text](media/user_interface.JPG)
 Figure 6: Working User Interface
 
 
@@ -82,3 +83,4 @@ Figure 6: Working User Interface
 **Wearing the Equipment**
 
 Here is how we mounted the equipment to the field operator. Without the AVMU in the Radar Operator&#39;s pelican case, the pelican case is solely there to provide the LAN and the User Interface.
+![alt text](media/field_operator_gear_on.jpg)
