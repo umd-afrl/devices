@@ -23,8 +23,8 @@ Open the Radar Operator&#39;s black Pelican case.
 ```
    ssh debian@192.168.1.7
 ```
-   When prompted for a password, enter
-   ```
+6. When prompted for a password, enter
+```
    temppwd
    cd ~/devices/beagle_avmu_py/src
    python3 BeagleAvmu.py
